@@ -10,7 +10,427 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap">
-  <link rel="stylesheet" href="style.css">
+  <style>
+    /* =========================================================
+       Currículo – HTML e CSS puro (sem bibliotecas)
+       ========================================================= */
+
+    /* ---------- Variáveis ---------- */
+    :root {
+      --papel: #f3f6f6;
+      --folha: #ffffff;
+      --tinta: #1b2a30;
+      --tinta-suave: #4a5b62;
+      --petroleo: #0e3b43;
+      --petroleo-claro: #1c5560;
+      --ambar: #f2b134;
+      --link: #0b5c6b;
+      --linha: #d5dfe0;
+
+      --fonte-titulo: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+      --fonte-texto: "Atkinson Hyperlegible", Verdana, system-ui, sans-serif;
+
+      --largura-lateral: 20rem;
+    }
+
+    /* Tema escuro (segue a preferência do sistema) */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --papel: #0b1a1e;
+        --folha: #12262b;
+        --tinta: #e8f0f1;
+        --tinta-suave: #a9bcc0;
+        --petroleo: #7fd1de;
+        --linha: #2b4249;
+        --link: #8fdbe7;
+      }
+
+      .lateral {
+        --petroleo: #0a2c33;
+      }
+    }
+
+    /* ---------- Base ---------- */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--papel);
+      color: var(--tinta);
+      font-family: var(--fonte-texto);
+      font-size: 1.0625rem;
+      line-height: 1.6;
+    }
+
+    h1, h2, h3 {
+      font-family: var(--fonte-titulo);
+      line-height: 1.15;
+      margin: 0;
+    }
+
+    p, ul, ol {
+      margin: 0;
+    }
+
+    ul, ol {
+      padding: 0;
+      list-style: none;
+    }
+
+    a {
+      color: var(--link);
+      text-underline-offset: 0.2em;
+    }
+
+    /* Foco visível para navegação por teclado */
+    :focus-visible {
+      outline: 3px solid var(--ambar);
+      outline-offset: 3px;
+    }
+
+    .lateral :focus-visible {
+      outline-color: #ffffff;
+    }
+
+    /* ---------- Acessibilidade ---------- */
+    .visualmente-oculto {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* ---------- Layout principal ---------- */
+    .pagina {
+      display: grid;
+      grid-template-columns: var(--largura-lateral) 1fr;
+      max-width: 62rem;
+      margin: 2.5rem auto;
+      background: var(--folha);
+      border-radius: 0.5rem;
+      overflow: hidden;
+      box-shadow: 0 1px 2px rgb(14 59 67 / 0.12), 0 12px 32px rgb(14 59 67 / 0.1);
+    }
+
+    /* ---------- Barra lateral ---------- */
+    .lateral {
+      background: var(--petroleo);
+      color: #ffffff;
+      padding: 2.5rem 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+    }
+
+    .foto {
+      margin: 0 0 0 0.6rem;
+      position: relative;
+      width: 11rem;
+    }
+
+    /* moldura âmbar deslocada atrás da foto */
+    .foto::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      transform: translate(-0.6rem, 0.6rem);
+      border: 3px solid var(--ambar);
+      border-radius: 0.25rem;
+    }
+
+    .foto img {
+      position: relative;
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1;
+      object-fit: cover;
+      object-position: center top;
+      border-radius: 0.25rem;
+      background: var(--petroleo-claro);
+    }
+
+    .nome {
+      font-size: 2.1rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .cargo {
+      margin-top: 0.5rem;
+      color: var(--ambar);
+      font-weight: 700;
+    }
+
+    .lateral h2 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 2px solid var(--petroleo-claro);
+    }
+
+    /* ---------- Contatos ---------- */
+    .contatos ul {
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .contatos a {
+      display: block;
+      padding: 0.6rem 0.85rem;
+      color: #ffffff;
+      font-weight: 700;
+      text-decoration: none;
+      background: var(--petroleo-claro);
+      border-left: 4px solid var(--ambar);
+      border-radius: 0.25rem;
+      transition: background-color 0.15s;
+    }
+
+    .contatos a:hover {
+      background: #246b78;
+    }
+
+    .detalhe {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 400;
+      overflow-wrap: anywhere;
+    }
+
+    /* Validação só com CSS: marca como inválido o link que não segue o padrão esperado */
+    .contatos a[data-tipo="email"]:not([href^="mailto:"]),
+    .contatos a[data-tipo="github"]:not([href^="https://github.com/"]),
+    .contatos a[data-tipo="linkedin"]:not([href^="https://www.linkedin.com/in/"]):not([href^="https://linkedin.com/in/"]) {
+      border-left-color: #ff9d9d;
+      text-decoration: line-through;
+      opacity: 0.8;
+    }
+
+    /* ---------- Nível (pontinhos) ---------- */
+    .nivel {
+      display: inline-flex;
+      gap: 0.3rem;
+      flex-shrink: 0;
+    }
+
+    .nivel span {
+      width: 0.65rem;
+      height: 0.65rem;
+      border: 2px solid currentColor;
+      border-radius: 50%;
+    }
+
+    .nivel .on {
+      background: currentColor;
+    }
+
+    /* ---------- Idiomas ---------- */
+    .idiomas {
+      display: grid;
+      gap: 0.6rem;
+    }
+
+    .idiomas li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .idiomas .nivel {
+      color: var(--ambar);
+    }
+
+    /* ---------- Conteúdo principal ---------- */
+    .principal {
+      padding: 2.5rem 2.5rem 3rem;
+      display: grid;
+      gap: 2.5rem;
+      align-content: start;
+    }
+
+    .principal:focus {
+      outline: none;
+    }
+
+    .principal h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      color: var(--petroleo);
+      margin-bottom: 1rem;
+    }
+
+    .principal h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+    }
+
+    .resumo {
+      max-width: 62ch;
+      font-size: 1.15rem;
+    }
+
+    .meta {
+      color: var(--tinta-suave);
+      font-size: 0.95rem;
+    }
+
+    /* ---------- Linha do tempo (experiência e formação) ---------- */
+    .linha-do-tempo {
+      border-left: 2px solid var(--linha);
+      margin-left: 0.4rem;
+    }
+
+    .linha-do-tempo > li {
+      position: relative;
+      padding: 0 0 1.5rem 1.5rem;
+    }
+
+    .linha-do-tempo > li:last-child {
+      padding-bottom: 0;
+    }
+
+    .linha-do-tempo > li::before {
+      content: "";
+      position: absolute;
+      left: -0.5rem;
+      top: 0.3rem;
+      width: 0.85rem;
+      height: 0.85rem;
+      background: var(--ambar);
+      border: 3px solid var(--petroleo);
+      border-radius: 50%;
+    }
+
+    .linha-do-tempo ul {
+      margin-top: 0.5rem;
+      display: grid;
+      gap: 0.25rem;
+    }
+
+    .linha-do-tempo ul li {
+      position: relative;
+      padding-left: 1.1rem;
+      max-width: 62ch;
+    }
+
+    .linha-do-tempo ul li::before {
+      content: "–";
+      position: absolute;
+      left: 0;
+      color: var(--tinta-suave);
+    }
+
+    /* ---------- Habilidades em detalhe ---------- */
+    .habilidades {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .habilidades li {
+      padding: 0.9rem 1.1rem;
+      border: 1px solid var(--linha);
+      border-top: 4px solid var(--petroleo);
+      border-radius: 0.25rem;
+    }
+
+    .habilidade-topo {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .habilidade-topo .nivel {
+      color: var(--petroleo);
+    }
+
+    .habilidades p {
+      margin-top: 0.35rem;
+      color: var(--tinta-suave);
+      font-size: 0.95rem;
+    }
+
+    /* ---------- Responsivo ---------- */
+    @media (max-width: 52rem) {
+      .pagina {
+        grid-template-columns: 1fr;
+        margin: 0;
+        border-radius: 0;
+      }
+
+      .lateral {
+        padding: 2rem 1.5rem;
+      }
+
+      .principal {
+        padding: 2rem 1.5rem 2.5rem;
+      }
+    }
+
+    @media (max-width: 40rem) {
+      .habilidades {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 30rem) {
+      body {
+        font-size: 1rem;
+      }
+
+      .nome {
+        font-size: 1.8rem;
+      }
+    }
+
+    /* ---------- Preferências do usuário ---------- */
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      * {
+        transition: none !important;
+      }
+    }
+
+    /* ---------- Impressão (salvar em PDF) ---------- */
+    @media print {
+      body {
+        background: #ffffff;
+        font-size: 11pt;
+      }
+
+      .pagina {
+        margin: 0;
+        box-shadow: none;
+        max-width: none;
+      }
+
+      .lateral {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  </style>
 </head>
 
 <body>
